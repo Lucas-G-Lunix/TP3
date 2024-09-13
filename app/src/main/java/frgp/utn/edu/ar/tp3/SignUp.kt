@@ -30,11 +30,11 @@ class SignUp : ComponentActivity() {
             TP3Theme {
                 Scaffold(
                     topBar = {
-                        TopBarLoginPage()
+                        TopBarSignUpPage()
                     },
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-                    LoginPage(modifier = Modifier.padding(innerPadding))
+                    SignUpPage(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -43,7 +43,7 @@ class SignUp : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarLoginPage() {
+fun TopBarSignUpPage() {
     TopAppBar(
         title = { Text(text = "Parking Control Registro") },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -54,7 +54,7 @@ fun TopBarLoginPage() {
 }
 
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun SignUpPage(modifier: Modifier = Modifier) {
     Column (
         modifier = modifier
             .fillMaxSize()
@@ -72,6 +72,6 @@ fun LoginPage(modifier: Modifier = Modifier) {
 @Composable
 fun SignUpPagePreview() {
     TP3Theme {
-        LoginPage()
+        SignUpPage()
     }
 }

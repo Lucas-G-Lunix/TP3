@@ -24,6 +24,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -71,7 +75,10 @@ fun TopBarMainPage() {
 @Composable
 fun MainPage(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    Column (
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
@@ -91,26 +98,46 @@ fun MainPage(modifier: Modifier = Modifier) {
             )
         }
         Row {
-            Icon(painter = painterResource(id = R.drawable.car_logo), contentDescription = "Car Logo", modifier = Modifier.width(80.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.car_logo),
+                contentDescription = "Car Logo",
+                modifier = Modifier.width(80.dp)
+            )
         }
         Row {
-            OutlinedTextField(value = "", onValueChange = {}, label = { Text("Nombre de Usuario") })
+            OutlinedTextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text("Nombre de Usuario") }
+            )
         }
         Row {
-            OutlinedTextField(value = "", onValueChange = {}, label = { Text("Contraseña") })
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Contraseña") }
+            )
         }
         Row {
-            Button(onClick = {
+            Button(
+                onClick = {
 
-            }, shape = MaterialTheme.shapes.medium, modifier = Modifier.width(150.dp)) {
+                },
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.width(150.dp)
+            ) {
                 Text("Iniciar Sesión")
             }
         }
         Row {
-            OutlinedButton(onClick = {
-                val intent = Intent(context, SignUp::class.java)
-                context.startActivity(intent)
-            }, shape = MaterialTheme.shapes.medium, modifier = Modifier.width(150.dp)) {
+            OutlinedButton(
+                onClick = {
+                    val intent = Intent(context, SignUp::class.java)
+                    context.startActivity(intent)
+                },
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.width(150.dp)
+            ) {
                 Text("Registrarse")
             }
         }
