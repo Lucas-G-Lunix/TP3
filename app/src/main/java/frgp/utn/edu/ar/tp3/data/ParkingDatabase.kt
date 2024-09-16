@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import frgp.utn.edu.ar.tp3.data.Dao.UserDao
 import frgp.utn.edu.ar.tp3.data.Entity.User
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class ParkingDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
