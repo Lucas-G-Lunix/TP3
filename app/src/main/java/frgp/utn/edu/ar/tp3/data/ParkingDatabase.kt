@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import frgp.utn.edu.ar.tp3.data.Dao.UserDao
-import frgp.utn.edu.ar.tp3.data.Entity.User
+import frgp.utn.edu.ar.tp3.data.dao.UserDao
+import frgp.utn.edu.ar.tp3.data.entity.User
 
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class ParkingDatabase : RoomDatabase() {

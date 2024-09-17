@@ -10,11 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d744ec00-f37c-48f8-945a-45182ed7ea63" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUpViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUp.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUpViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUpViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/Dao/UserDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/dao/UserDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/Entity/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/entity/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/ParkingDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/ParkingDatabase.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +24,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=ZY32FT9RP5)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\Max\.android\avd\Pixel_Fold_API_35.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

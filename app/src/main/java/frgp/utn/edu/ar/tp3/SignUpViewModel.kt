@@ -62,6 +62,11 @@ class SignUpViewModel: ViewModel() {
         }
     }
     fun validateMail() {
+        if(!Regex(".+@.+\\..+").containsMatchIn(mail.value?:""))
+            _mailError.value = err("Ingrese una dirección de correo electrónico válida. ")
+        else _mailError.value = ok()
+    }
+    fun postValidateMail() {
 
     }
     fun validatePassword() {
