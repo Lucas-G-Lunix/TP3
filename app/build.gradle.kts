@@ -1,8 +1,8 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
-
 android {
     namespace = "frgp.utn.edu.ar.tp3"
     compileSdk = 34
@@ -67,6 +67,4 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Room
-    implementation(libs.androidx.room.ktx)
 }
