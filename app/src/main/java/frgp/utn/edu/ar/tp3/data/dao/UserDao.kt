@@ -17,13 +17,16 @@ interface UserDao {
     @Delete
     suspend fun delete(user: User)
 
-    @Query("SELECT * from users WHERE id = :id")
-    fun getUser(id: Int): Flow<User>
+    @Query("SELECT * from users WHERE username = :username")
+    fun getUser(username: String): Flow<User>
 
-    @Query("SELECT * from users ORDER BY id ASC")
+    @Query("SELECT * from users")
     fun getAllUsers(): Flow<List<User>>
 
     @Query("SELECT COUNT(*) > 0 FROM users WHERE users.mail = :mail")
     fun isMailAddressRegistered(mail: String): Boolean
+
+    @Query("SELECT COUNT(*) > 0 FROM users WHERE users.username = :username")
+    fun isUsernameTaken(username: String): Boolean
 
 }

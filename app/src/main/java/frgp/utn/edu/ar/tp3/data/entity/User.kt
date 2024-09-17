@@ -11,12 +11,13 @@ import androidx.room.PrimaryKey
         Index(value = ["mail"], unique = true)
     ])
 data class User(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey
+    @ColumnInfo(name="username")
+    val username: String,
     @ColumnInfo(name = "mail")
-    val mail: String?,
-    @ColumnInfo(name = "first_name")
-    val firstName: String?,
+    val mail: String,
+    @ColumnInfo(name = "name")
+    val name: String,
     @ColumnInfo(name = "password")
-    val password: String?
+    val password: String
 )

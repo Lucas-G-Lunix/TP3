@@ -6,12 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -39,7 +43,6 @@ class SignUp : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val signUpViewModel: SignUpViewModel by viewModels()
-
         enableEdgeToEdge()
         setContent {
             TP3Theme {
@@ -81,72 +84,88 @@ fun Gap() {
 }
 @Composable
 fun SignUpPage(modifier: Modifier = Modifier, signUpViewModel: SignUpViewModel) {
+    val scrollState = rememberScrollState()
     val name by signUpViewModel.name.observeAsState("")
+    val username by signUpViewModel.username.observeAsState("")
     val mail by signUpViewModel.mail.observeAsState("")
     val pass by signUpViewModel.password.observeAsState("")
     val rpss by signUpViewModel.repeatPassword.observeAsState(initial = "")
 
     val nameError by signUpViewModel.nameError.observeAsState(signUpViewModel.ok())
+    val usernameError by signUpViewModel.usernameError.observeAsState(signUpViewModel.ok())
     val mailError by signUpViewModel.mailError.observeAsState(signUpViewModel.ok())
     val passError by signUpViewModel.passwordError.observeAsState(signUpViewModel.ok())
     val rpssError by signUpViewModel.repeatPasswordError.observeAsState(signUpViewModel.ok())
-
-    Column (
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row {
-            Text(text = "Registro")
-        }
-        Gap()
-        Row {
-            TextField(
-                value = name,
-                onValueChange = { newName: String -> signUpViewModel.changeName(newName) },
-                label = { Text("Nombre") },
-                isError = nameError.error,
-                supportingText = { Text(nameError.message) }
-            )
-        }
-        Gap()
-        Row {
-            TextField(
-                value = mail,
-                onValueChange = { newValue: String -> signUpViewModel.changeMail(newValue) },
-                label = { Text("Correo electrónico") },
-                isError = mailError.error,
-                supportingText = { Text(mailError.message) }
-            )
-        }
-        Gap()
-        Row {
-            TextField(
-                value = pass,
-                onValueChange = { newValue: String -> signUpViewModel.changePassword(newValue) },
-                label = { Text("Contraseña") },
-                visualTransformation = PasswordVisualTransformation(),
-                isError = passError.error,
-                supportingText = { Text(passError.message) }
-            )
-        }
-        Gap()
-        Row {
-            TextField(
-                value = rpss,
-                onValueChange = { newValue: String -> signUpViewModel.changeRepeatPassword(newValue) },
-                label = { Text("Repetir contraseña") },
-                visualTransformation = PasswordVisualTransformation(),
-                isError = rpssError.error,
-                supportingText = { Text(rpssError.message) }
-            )
-        }
-        Gap()
-        Row {
-            Button(onClick = {}) {
-                Text("Aceptar")
+    Box(modifier = Modifier.verticalScroll(scrollState)) {
+        Column (
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row {
+                Text(text = "Registro")
+            }
+            Gap()
+            Row {
+                TextField(
+                    value = username,
+                    onValueChange = { newValue: String -> signUpViewModel.changeUsername(newValue) },
+                    label = { Text("Nombre de usuario") },
+                    isError = usernameError.error,
+                    supportingText = { Text(usernameError.message) }
+                )
+            }
+            Gap()
+            Row {
+                TextField(
+                    value = name,
+                    onValueChange = { newName: String -> signUpViewModel.changeName(newName) },
+                    label = { Text("Nombre") },
+                    isError = nameError.error,
+                    supportingText = { Text(nameError.message) }
+                )
+            }
+            Gap()
+            Row {
+                TextField(
+                    value = mail,
+                    onValueChange = { newValue: String -> signUpViewModel.changeMail(newValue) },
+                    label = { Text("Correo electrónico") },
+                    isError = mailError.error,
+                    supportingText = { Text(mailError.message) }
+                )
+            }
+            Gap()
+            Row {
+                TextField(
+                    value = pass,
+                    onValueChange = { newValue: String -> signUpViewModel.changePassword(newValue) },
+                    label = { Text("Contraseña") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = passError.error,
+                    supportingText = { Text(passError.message) }
+                )
+            }
+            Gap()
+            Row {
+                TextField(
+                    value = rpss,
+                    onValueChange = { newValue: String -> signUpViewModel.changeRepeatPassword(newValue) },
+                    label = { Text("Repetir contraseña") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = rpssError.error,
+                    supportingText = { Text(rpssError.message) }
+                )
+            }
+            Gap()
+            Row {
+                Button(onClick = {
+                    signUpViewModel.signup()
+                }) {
+                    Text("Aceptar")
+                }
             }
         }
     }

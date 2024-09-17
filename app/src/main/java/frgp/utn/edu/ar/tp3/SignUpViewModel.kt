@@ -1,8 +1,12 @@
 package frgp.utn.edu.ar.tp3
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import frgp.utn.edu.ar.tp3.data.entity.User
+import frgp.utn.edu.ar.tp3.data.logic.UserLogicImpl
 
 class DataError {
     private var _message: String = ""
@@ -19,16 +23,20 @@ class DataError {
     val error: Boolean get() = _error
 }
 
-class SignUpViewModel: ViewModel() {
+class SignUpViewModel(application: Application): AndroidViewModel(application) {
 
-    private val _name = MutableLiveData<String>("")
-    private val _nameError = MutableLiveData<DataError>()
-    private val _mail = MutableLiveData<String>()
-    private val _mailError = MutableLiveData<DataError>()
-    private val _password = MutableLiveData<String>()
-    private val _passwordError = MutableLiveData<DataError>()
-    private val _repeatPassword = MutableLiveData<String>()
-    private val _repeatPasswordError = MutableLiveData<DataError>()
+    private val logic: UserLogicImpl
+
+    private val _name = MutableLiveData("")
+    private val _nameError = MutableLiveData(ok())
+    private val _mail = MutableLiveData("")
+    private val _mailError = MutableLiveData(ok())
+    private val _password = MutableLiveData("")
+    private val _passwordError = MutableLiveData(ok())
+    private val _repeatPassword = MutableLiveData("")
+    private val _repeatPasswordError = MutableLiveData(ok())
+    private val _username = MutableLiveData("")
+    private val _usernameError = MutableLiveData(ok())
 
     val name: LiveData<String> get() = _name
     val nameError: LiveData<DataError> get() = _nameError
@@ -38,8 +46,11 @@ class SignUpViewModel: ViewModel() {
     val passwordError: LiveData<DataError> get() = _passwordError
     val repeatPassword: LiveData<String> get() = _repeatPassword
     val repeatPasswordError: LiveData<DataError> get() = _repeatPasswordError
+    val username: LiveData<String> get() = _username
+    val usernameError: LiveData<DataError> get() = _usernameError
 
     init {
+        logic = UserLogicImpl(application)
         _name.value = ""
         _mail.value = ""
         _password.value = ""
@@ -64,10 +75,14 @@ class SignUpViewModel: ViewModel() {
     fun validateMail() {
         if(!Regex(".+@.+\\..+").containsMatchIn(mail.value?:""))
             _mailError.value = err("Ingrese una dirección de correo electrónico válida. ")
-        else _mailError.value = ok()
+        else {
+            postValidateMail()
+        }
     }
     fun postValidateMail() {
-
+        if(logic.isMailRegistered(mail.value?:""))
+            _mailError.value = err("El correo electrónico ya está registrado. ")
+        else _mailError.value = ok()
     }
     fun validatePassword() {
         if(!Regex(".*[A-Z].*").containsMatchIn(password.value ?: "")) {
@@ -87,6 +102,20 @@ class SignUpViewModel: ViewModel() {
         else
             _passwordError.value = ok()
     }
+
+    fun validateUsername() {
+        if(!Regex("^[a-zA-Z]").containsMatchIn(username.value?:""))
+            _usernameError.value = err("Debe comenzar con una letra. ")
+        else if(!Regex("^[a-zA-Z][a-zA-Z0-9.-_]{0,300}").containsMatchIn(username.value?:""))
+            _usernameError.value = err("Debe contener sólo letras, números, guiones y/o puntos.")
+        else if(!Regex("^[a-zA-Z][a-zA-Z0-9.-_]{2,30}").containsMatchIn(username.value?:""))
+            _usernameError.value = err("Debe tener entre 2 y 30 caracteres. ")
+        else if(logic.isUsernameTaken(username.value?:""))
+            _usernameError.value = err("Nombre de usuario no disponible. ")
+        else
+            _usernameError.value = ok()
+    }
+
     fun validateRepeatedPassword() {
         if((repeatPassword.value?:"").equals(password.value)) _repeatPasswordError.value = ok()
         else _repeatPasswordError.value = err("Las contraseñas no coinciden. ")
@@ -107,6 +136,25 @@ class SignUpViewModel: ViewModel() {
     fun changeRepeatPassword(newPassword: String) {
         _repeatPassword.value = newPassword
         validateRepeatedPassword()
+    }
+    fun changeUsername(newUsername: String) {
+        _username.value = newUsername
+        validateUsername()
+    }
+
+    fun signup() {
+        if(booleanArrayOf(
+                (nameError.value?:ok()).error,
+                (mailError.value?:ok()).error,
+                (passwordError.value?:ok()).error,
+                (repeatPasswordError.value?:ok()).error
+            ).contains(true)) return;
+        logic.addUser(User(name = name.value?:"", mail = mail.value?:"", password = password.value?:"", username=username.value?:""))
+        changeName("")
+        changeMail("")
+        changePassword("")
+        changeRepeatPassword("")
+        changeUsername("")
     }
 
 }
