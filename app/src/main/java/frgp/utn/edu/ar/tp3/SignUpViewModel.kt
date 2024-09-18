@@ -5,10 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import frgp.utn.edu.ar.tp3.data.ParkingDatabase
 import frgp.utn.edu.ar.tp3.data.dao.UserDao
 import frgp.utn.edu.ar.tp3.data.entity.User
-import frgp.utn.edu.ar.tp3.data.logic.UserLogicImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +31,8 @@ class DataError {
 
 class SignUpViewModel(application: Application): AndroidViewModel(application) {
 
-    private val logic: UserDao
+    private val db: ParkingDatabase = Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").build()
+    private val dao: UserDao = db.userDao()
 
     private val _name = MutableLiveData("")
     private val _nameError = MutableLiveData(ok())
@@ -55,7 +57,6 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
     val usernameError: LiveData<DataError> get() = _usernameError
 
     init {
-        logic = ParkingDatabase.getDatabase(application.applicationContext).userDao()
         _name.value = ""
         _mail.value = ""
         _password.value = ""
@@ -86,7 +87,7 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
     }
     fun postValidateMail() {
         CoroutineScope(Dispatchers.IO).launch {
-            if(logic.isMailAddressRegistered(mail.value?:""))
+            if(dao.isMailAddressRegistered(mail.value?:""))
                 _mailError.postValue(err("El correo electrónico ya está registrado. "))
             else _mailError.postValue(ok())
         }
@@ -120,7 +121,7 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
         else
             _usernameError.value = ok()
         CoroutineScope(Dispatchers.IO).launch {
-            if(logic.isUsernameTaken(username.value?:""))
+            if(dao.isUsernameAlreadyTaken(username.value?:""))
                 _usernameError.postValue(err("Nombre de usuario no disponible. "))
             else
                 _usernameError.postValue(ok())
@@ -161,7 +162,7 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
                 (repeatPasswordError.value?:ok()).error
             ).contains(true)) return;
         CoroutineScope(Dispatchers.IO).launch {
-            logic.add(User(name = name.value?:"", mail = mail.value?:"", password = password.value?:"", username=username.value?:""))
+            dao.insert(User(name = name.value?:"", mail = mail.value?:"", password = password.value?:"", username=username.value?:""))
         }
         changeName("")
         changeMail("")

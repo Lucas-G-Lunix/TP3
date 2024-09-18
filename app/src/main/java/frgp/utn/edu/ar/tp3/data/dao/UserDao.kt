@@ -10,23 +10,20 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
+
     @Insert
-    suspend fun add(user: User)
-    @Update
-    suspend fun update(user: User)
+    fun insert(vararg users: User)
+
     @Delete
-    suspend fun delete(user: User)
+    fun delete(user: User)
 
-    @Query("SELECT * from users WHERE username = :username")
-    fun getUser(username: String): Flow<User>
-
-    @Query("SELECT * from users")
-    fun getAllUsers(): Flow<List<User>>
+    @Query("SELECT * FROM users")
+    fun getAll(): List<User>
 
     @Query("SELECT COUNT(*) > 0 FROM users WHERE users.mail = :mail")
-    suspend fun isMailAddressRegistered(mail: String): Boolean
+    fun isMailAddressRegistered(mail: String): Boolean
 
     @Query("SELECT COUNT(*) > 0 FROM users WHERE users.username = :username")
-    suspend fun isUsernameTaken(username: String): Boolean
+    fun isUsernameAlreadyTaken(username: String): Boolean
 
 }
