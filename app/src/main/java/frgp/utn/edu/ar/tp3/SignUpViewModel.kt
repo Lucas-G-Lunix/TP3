@@ -5,8 +5,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import frgp.utn.edu.ar.tp3.data.ParkingDatabase
+import frgp.utn.edu.ar.tp3.data.dao.UserDao
 import frgp.utn.edu.ar.tp3.data.entity.User
 import frgp.utn.edu.ar.tp3.data.logic.UserLogicImpl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DataError {
     private var _message: String = ""
@@ -25,7 +30,7 @@ class DataError {
 
 class SignUpViewModel(application: Application): AndroidViewModel(application) {
 
-    private val logic: UserLogicImpl
+    private val logic: UserDao
 
     private val _name = MutableLiveData("")
     private val _nameError = MutableLiveData(ok())
@@ -50,7 +55,7 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
     val usernameError: LiveData<DataError> get() = _usernameError
 
     init {
-        logic = UserLogicImpl(application)
+        logic = ParkingDatabase.getDatabase(application.applicationContext).userDao()
         _name.value = ""
         _mail.value = ""
         _password.value = ""
@@ -80,9 +85,11 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
         }
     }
     fun postValidateMail() {
-        if(logic.isMailRegistered(mail.value?:""))
-            _mailError.value = err("El correo electrónico ya está registrado. ")
-        else _mailError.value = ok()
+        CoroutineScope(Dispatchers.IO).launch {
+            if(logic.isMailAddressRegistered(mail.value?:""))
+                _mailError.postValue(err("El correo electrónico ya está registrado. "))
+            else _mailError.postValue(ok())
+        }
     }
     fun validatePassword() {
         if(!Regex(".*[A-Z].*").containsMatchIn(password.value ?: "")) {
@@ -110,10 +117,14 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
             _usernameError.value = err("Debe contener sólo letras, números, guiones y/o puntos.")
         else if(!Regex("^[a-zA-Z][a-zA-Z0-9.-_]{2,30}").containsMatchIn(username.value?:""))
             _usernameError.value = err("Debe tener entre 2 y 30 caracteres. ")
-        else if(logic.isUsernameTaken(username.value?:""))
-            _usernameError.value = err("Nombre de usuario no disponible. ")
         else
             _usernameError.value = ok()
+        CoroutineScope(Dispatchers.IO).launch {
+            if(logic.isUsernameTaken(username.value?:""))
+                _usernameError.postValue(err("Nombre de usuario no disponible. "))
+            else
+                _usernameError.postValue(ok())
+        }
     }
 
     fun validateRepeatedPassword() {
@@ -149,7 +160,9 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
                 (passwordError.value?:ok()).error,
                 (repeatPasswordError.value?:ok()).error
             ).contains(true)) return;
-        logic.addUser(User(name = name.value?:"", mail = mail.value?:"", password = password.value?:"", username=username.value?:""))
+        CoroutineScope(Dispatchers.IO).launch {
+            logic.add(User(name = name.value?:"", mail = mail.value?:"", password = password.value?:"", username=username.value?:""))
+        }
         changeName("")
         changeMail("")
         changePassword("")

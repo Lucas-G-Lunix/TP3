@@ -17,19 +17,19 @@ class UserLogicImpl(context: Context) {
         userDao = database.userDao()
     }
 
-    fun addUser(user: User) {
+    suspend fun addUser(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
             userDao.add(user)
         }
     }
 
-    fun updateUser(user: User) {
+    suspend fun updateUser(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
             userDao.update(user)
         }
     }
 
-    fun deleteUser(user: User) {
+    suspend fun deleteUser(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
             userDao.delete(user)
         }
@@ -43,11 +43,11 @@ class UserLogicImpl(context: Context) {
         return userDao.getAllUsers()
     }
 
-    fun isMailRegistered(mail: String): Boolean {
+    suspend fun isMailRegistered(mail: String): Boolean {
         return userDao.isMailAddressRegistered(mail)
     }
 
-    fun isUsernameTaken(username: String): Boolean {
+    suspend fun isUsernameTaken(username: String): Boolean {
         return userDao.isUsernameTaken(username)
     }
 

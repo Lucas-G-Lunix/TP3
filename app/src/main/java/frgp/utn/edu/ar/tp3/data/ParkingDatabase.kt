@@ -12,20 +12,20 @@ abstract class ParkingDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object {
-        const val DATABASE_NAME = "parking_db"
-
         @Volatile
-        private var Instance: ParkingDatabase? = null
+        private var INSTANCE: ParkingDatabase? = null
+
         fun getDatabase(context: Context): ParkingDatabase {
-            return (Instance ?: synchronized(this) {
-                Room.databaseBuilder(
-                        context,
-                        ParkingDatabase::class.java,
-                        DATABASE_NAME
-                    ).fallbackToDestructiveMigration()
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    ParkingDatabase::class.java,
+                    "parking_db"
+                ).fallbackToDestructiveMigration()
                     .build()
-                    .also { Instance = it }
-            })
+                INSTANCE = instance
+                instance
+            }
         }
     }
 }

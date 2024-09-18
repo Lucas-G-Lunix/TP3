@@ -24,9 +24,9 @@ interface UserDao {
     fun getAllUsers(): Flow<List<User>>
 
     @Query("SELECT COUNT(*) > 0 FROM users WHERE users.mail = :mail")
-    fun isMailAddressRegistered(mail: String): Boolean
+    suspend fun isMailAddressRegistered(mail: String): Boolean
 
     @Query("SELECT COUNT(*) > 0 FROM users WHERE users.username = :username")
-    fun isUsernameTaken(username: String): Boolean
+    suspend fun isUsernameTaken(username: String): Boolean
 
 }
