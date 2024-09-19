@@ -90,6 +90,7 @@ fun SignUpPage(modifier: Modifier = Modifier, signUpViewModel: SignUpViewModel) 
     val mail by signUpViewModel.mail.observeAsState("")
     val pass by signUpViewModel.password.observeAsState("")
     val rpss by signUpViewModel.repeatPassword.observeAsState(initial = "")
+    val gen by signUpViewModel.general.observeAsState(initial = false)
 
     val nameError by signUpViewModel.nameError.observeAsState(signUpViewModel.ok())
     val usernameError by signUpViewModel.usernameError.observeAsState(signUpViewModel.ok())
@@ -161,9 +162,11 @@ fun SignUpPage(modifier: Modifier = Modifier, signUpViewModel: SignUpViewModel) 
             }
             Gap()
             Row {
-                Button(onClick = {
-                    signUpViewModel.signup()
-                }) {
+                Button(
+                    enabled = gen,
+                    onClick = {
+                        signUpViewModel.signup()
+                    }) {
                     Text("Aceptar")
                 }
             }

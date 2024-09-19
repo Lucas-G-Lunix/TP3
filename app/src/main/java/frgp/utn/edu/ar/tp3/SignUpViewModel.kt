@@ -44,6 +44,7 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
     private val _repeatPasswordError = MutableLiveData(ok())
     private val _username = MutableLiveData("")
     private val _usernameError = MutableLiveData(ok())
+    private val _general = MutableLiveData<Boolean>(false)
 
     val name: LiveData<String> get() = _name
     val nameError: LiveData<DataError> get() = _nameError
@@ -55,12 +56,14 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
     val repeatPasswordError: LiveData<DataError> get() = _repeatPasswordError
     val username: LiveData<String> get() = _username
     val usernameError: LiveData<DataError> get() = _usernameError
+    val general: LiveData<Boolean> get() = _general
 
     init {
-        _name.value = ""
-        _mail.value = ""
-        _password.value = ""
-        _repeatPassword.value = ""
+        _username.value = "maximo"
+        _name.value = "Máximo"
+        _mail.value = "maximo@canedo.com.ar"
+        _password.value = "Abc.1234"
+        _repeatPassword.value = "Abc.1234"
     }
 
     fun err(message: String): DataError {
@@ -136,31 +139,51 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
     fun changeName(newName: String) {
         _name.value = newName
         validateName()
+        checkGen()
     }
     fun changeMail(newMail: String) {
         _mail.value = newMail
         validateMail()
+        checkGen()
     }
     fun changePassword(newPassword: String) {
         _password.value = newPassword
         validatePassword()
+        checkGen()
     }
     fun changeRepeatPassword(newPassword: String) {
         _repeatPassword.value = newPassword
         validateRepeatedPassword()
+        checkGen()
     }
     fun changeUsername(newUsername: String) {
         _username.value = newUsername
         validateUsername()
+        checkGen()
     }
 
-    fun signup() {
+    fun checkGen(): Boolean {
         if(booleanArrayOf(
+                (usernameError.value?:ok()).error,
                 (nameError.value?:ok()).error,
                 (mailError.value?:ok()).error,
                 (passwordError.value?:ok()).error,
                 (repeatPasswordError.value?:ok()).error
-            ).contains(true)) return;
+            ).contains(true)) {
+            _general.value = (false)
+            return false;
+        }
+        val fields = arrayOf(name, mail, password, repeatPassword, username)
+        if(fields.any { (it.value?:"").trim().isEmpty() }) {
+            _general.value = (false)
+            return false;
+        }
+        _general.value = true
+        return true
+    }
+
+    fun signup() {
+        if(!checkGen()) return
         CoroutineScope(Dispatchers.IO).launch {
             dao.insert(User(name = name.value?:"", mail = mail.value?:"", password = password.value?:"", username=username.value?:""))
         }
