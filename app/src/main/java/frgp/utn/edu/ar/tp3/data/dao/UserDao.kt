@@ -26,4 +26,6 @@ interface UserDao {
     @Query("SELECT COUNT(*) > 0 FROM users WHERE users.username = :username")
     fun isUsernameAlreadyTaken(username: String): Boolean
 
+    @Query("SELECT COUNT(*) > 0 FROM users WHERE users.username = :username AND users.password = :password")
+    suspend fun verifyUser(username: String, password: String): Boolean
 }

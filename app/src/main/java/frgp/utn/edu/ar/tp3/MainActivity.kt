@@ -2,6 +2,7 @@ package frgp.utn.edu.ar.tp3
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -36,12 +37,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.Room
+import frgp.utn.edu.ar.tp3.data.ParkingDatabase
+import frgp.utn.edu.ar.tp3.data.dao.UserDao
 import frgp.utn.edu.ar.tp3.ui.theme.TP3Theme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : ComponentActivity() {
+    private lateinit var db: ParkingDatabase
+    private lateinit var dao: UserDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        db = Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").build()
+        dao = db.userDao()
+
         enableEdgeToEdge()
         setContent {
             TP3Theme {
@@ -52,7 +66,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
                     MainPage(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        dao
                     )
                 }
             }
@@ -73,7 +88,7 @@ fun TopBarMainPage() {
 }
 
 @Composable
-fun MainPage(modifier: Modifier = Modifier) {
+fun MainPage(modifier: Modifier = Modifier, dao: UserDao) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -121,7 +136,24 @@ fun MainPage(modifier: Modifier = Modifier) {
         Row {
             Button(
                 onClick = {
-
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if(username.isNotBlank() && password.isNotBlank()) {
+                            val isUserValid = dao.verifyUser(username, password)
+                            withContext(Dispatchers.Main) {
+                                if (isUserValid) {
+                                    val intent = Intent(context, MainView::class.java)
+                                    context.startActivity(intent)
+                                } else {
+                                    Toast.makeText(context, "Credenciales invalidas", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                        else {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "Campos incompletos", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
                 },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.width(150.dp)
@@ -148,7 +180,7 @@ fun MainPage(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun MainPagePreview() {
-    TP3Theme {
+    /*TP3Theme {
         Scaffold(
             topBar = {
                 TopBarMainPage()
@@ -159,5 +191,5 @@ fun MainPagePreview() {
                 modifier = Modifier.padding(innerPadding)
             )
         }
-    }
+    }*/
 }
