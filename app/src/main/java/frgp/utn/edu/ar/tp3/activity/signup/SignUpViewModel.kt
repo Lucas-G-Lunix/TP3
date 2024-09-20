@@ -1,12 +1,13 @@
-package frgp.utn.edu.ar.tp3
+package frgp.utn.edu.ar.tp3.activity.signup
 
 import android.app.Application
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.room.Room
-import androidx.room.RoomDatabase
+import frgp.utn.edu.ar.tp3.activity.login.Login
 import frgp.utn.edu.ar.tp3.data.ParkingDatabase
 import frgp.utn.edu.ar.tp3.data.dao.UserDao
 import frgp.utn.edu.ar.tp3.data.entity.User
@@ -192,6 +193,9 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
         changePassword("")
         changeRepeatPassword("")
         changeUsername("")
+        val intent = Intent(getApplication<Application>().applicationContext, Login::class.java)
+        startActivity(getApplication<Application>().applicationContext, intent, null)
+
     }
 
 }

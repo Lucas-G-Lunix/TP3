@@ -1,4 +1,4 @@
-package frgp.utn.edu.ar.tp3
+package frgp.utn.edu.ar.tp3.activity.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -38,6 +38,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.room.Room
+import frgp.utn.edu.ar.tp3.activity.main.MainView
+import frgp.utn.edu.ar.tp3.R
+import frgp.utn.edu.ar.tp3.activity.signup.SignUp
 import frgp.utn.edu.ar.tp3.data.ParkingDatabase
 import frgp.utn.edu.ar.tp3.data.dao.UserDao
 import frgp.utn.edu.ar.tp3.ui.theme.TP3Theme
@@ -47,7 +50,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class MainActivity : ComponentActivity() {
+class Login : ComponentActivity() {
     private lateinit var db: ParkingDatabase
     private lateinit var dao: UserDao
 

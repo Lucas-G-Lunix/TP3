@@ -13,17 +13,17 @@
         android:theme="@style/Theme.TP3"
         tools:targetApi="31">
         <activity
-            android:name=".SignUp"
+            android:name=".activity.signup.SignUp"
             android:exported="false"
             android:label="@string/title_activity_sign_up"
             android:theme="@style/Theme.TP3" />
         <activity
-            android:name=".MainView"
+            android:name=".activity.main.MainView"
             android:exported="false"
             android:label="MainView"
             android:theme="@style/Theme.TP3" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.login.Login"
             android:exported="true"
             android:theme="@style/Theme.TP3">
             <intent-filter>
