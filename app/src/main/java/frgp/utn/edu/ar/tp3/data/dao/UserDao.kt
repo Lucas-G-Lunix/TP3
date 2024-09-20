@@ -20,6 +20,9 @@ interface UserDao {
     @Query("SELECT * FROM users")
     fun getAll(): List<User>
 
+    @Query("SELECT * FROM users WHERE users.username = :username")
+    fun getUser(username: String): Flow<User?>
+
     @Query("SELECT COUNT(*) > 0 FROM users WHERE users.mail = :mail")
     fun isMailAddressRegistered(mail: String): Boolean
 

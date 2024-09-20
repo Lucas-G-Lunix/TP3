@@ -54,6 +54,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.datastore.core.android)
     val room_version = "2.6.1"
 
     implementation(libs.androidx.core.ktx)
@@ -77,7 +78,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
-
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-paging:$room_version")
 

@@ -10,12 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d744ec00-f37c-48f8-945a-45182ed7ea63" name="Changes" comment="Actualizar workspace.xml">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/logic/AuthManager.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/Login.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/SignUp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUpViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/SignUpViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/login/Login.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/login/Login.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/dao/UserDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/dao/UserDao.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,9 +46,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin Class" />
         <option value="Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -103,6 +103,14 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\GitHub\PROGAVII-TP3\app\src\main\java\frgp\utn\edu\ar\tp3\activity\signup" />
+      <recent name="F:\GitHub\PROGAVII-TP3\app\src\main\java\frgp\utn\edu\ar\tp3\activity\main" />
+      <recent name="F:\GitHub\PROGAVII-TP3\app\src\main\java\frgp\utn\edu\ar\tp3\activity\login" />
+      <recent name="F:\GitHub\PROGAVII-TP3\app\src\main\java\frgp\utn\edu\ar\tp3\activity" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="TP2" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TP2.main" />

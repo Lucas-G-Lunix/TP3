@@ -3,9 +3,11 @@ package frgp.utn.edu.ar.tp3.activity.login
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +46,7 @@ import frgp.utn.edu.ar.tp3.R
 import frgp.utn.edu.ar.tp3.activity.signup.SignUp
 import frgp.utn.edu.ar.tp3.data.ParkingDatabase
 import frgp.utn.edu.ar.tp3.data.dao.UserDao
+import frgp.utn.edu.ar.tp3.data.logic.AuthManager
 import frgp.utn.edu.ar.tp3.ui.theme.TP3Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +57,8 @@ import kotlinx.coroutines.withContext
 class Login : ComponentActivity() {
     private lateinit var db: ParkingDatabase
     private lateinit var dao: UserDao
+
+    private val authManager: AuthManager by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +76,7 @@ class Login : ComponentActivity() {
                 ) { innerPadding ->
                     MainPage(
                         modifier = Modifier.padding(innerPadding),
-                        dao
+                        authManager
                     )
                 }
             }
@@ -91,10 +97,20 @@ fun TopBarMainPage() {
 }
 
 @Composable
-fun MainPage(modifier: Modifier = Modifier, dao: UserDao) {
+fun MainPage(modifier: Modifier = Modifier, authManager: AuthManager) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(key1 = Unit) {
+        authManager.getCurrentUser().collect {
+            if(it != null) {
+                makeText(context, "¡Bienvenido de vuelta!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(context, MainView::class.java)
+                context.startActivity(intent)
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -141,19 +157,21 @@ fun MainPage(modifier: Modifier = Modifier, dao: UserDao) {
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
                         if(username.isNotBlank() && password.isNotBlank()) {
-                            val isUserValid = dao.verifyUser(username, password)
-                            withContext(Dispatchers.Main) {
-                                if (isUserValid) {
+                            try {
+                                authManager.login(username, password)
+                                withContext(Dispatchers.Main) {
                                     val intent = Intent(context, MainView::class.java)
                                     context.startActivity(intent)
-                                } else {
-                                    Toast.makeText(context, "Credenciales invalidas", Toast.LENGTH_SHORT).show()
                                 }
+                            } catch(exception: IllegalArgumentException) {
+                                makeText(context, "Ingrese sus credenciales. ", Toast.LENGTH_SHORT).show()
+                            } catch(exception: Exception) {
+                                makeText(context, exception.message, Toast.LENGTH_LONG).show()
                             }
                         }
                         else {
                             withContext(Dispatchers.Main) {
-                                Toast.makeText(context, "Campos incompletos", Toast.LENGTH_SHORT).show()
+                                makeText(context, "Campos incompletos", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
