@@ -193,8 +193,10 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
         changePassword("")
         changeRepeatPassword("")
         changeUsername("")
-        val intent = Intent(getApplication<Application>().applicationContext, Login::class.java)
-        startActivity(getApplication<Application>().applicationContext, intent, null)
+        /*val intent = Intent(getApplication<Application>().applicationContext, Login::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(getApplication<Application>().applicationContext, intent, null)*/
 
     }
 

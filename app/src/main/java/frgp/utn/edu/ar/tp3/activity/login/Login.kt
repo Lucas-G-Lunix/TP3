@@ -2,6 +2,8 @@ package frgp.utn.edu.ar.tp3.activity.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.activity.ComponentActivity
@@ -101,12 +103,16 @@ fun MainPage(modifier: Modifier = Modifier, authManager: AuthManager) {
     val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
+    val handler = Handler(Looper.getMainLooper())
     LaunchedEffect(key1 = Unit) {
         authManager.getCurrentUser().collect {
             if(it != null) {
-                makeText(context, "¡Bienvenido de vuelta!", Toast.LENGTH_SHORT).show()
-                val intent = Intent(context, MainView::class.java)
+                handler.post {
+                    makeText(context, "¡Bienvenido de vuelta!", Toast.LENGTH_SHORT).show()
+                }
+                val intent = Intent(context, MainView::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
                 context.startActivity(intent)
             }
         }
@@ -155,18 +161,25 @@ fun MainPage(modifier: Modifier = Modifier, authManager: AuthManager) {
         Row {
             Button(
                 onClick = {
+                    val handler = Handler(Looper.getMainLooper())
                     CoroutineScope(Dispatchers.IO).launch {
                         if(username.isNotBlank() && password.isNotBlank()) {
                             try {
                                 authManager.login(username, password)
                                 withContext(Dispatchers.Main) {
-                                    val intent = Intent(context, MainView::class.java)
+                                    val intent = Intent(context, MainView::class.java).apply {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                    }
                                     context.startActivity(intent)
                                 }
                             } catch(exception: IllegalArgumentException) {
-                                makeText(context, "Ingrese sus credenciales. ", Toast.LENGTH_SHORT).show()
+                                handler.post {
+                                    makeText(context, "Ingrese sus credenciales. ", Toast.LENGTH_SHORT).show()
+                                }
                             } catch(exception: Exception) {
-                                makeText(context, exception.message, Toast.LENGTH_LONG).show()
+                                handler.post {
+                                    makeText(context, exception.message, Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                         else {
