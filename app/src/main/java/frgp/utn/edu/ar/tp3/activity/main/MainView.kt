@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,9 +40,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import frgp.utn.edu.ar.tp3.data.entity.User
+import frgp.utn.edu.ar.tp3.data.logic.AuthManager
 import frgp.utn.edu.ar.tp3.ui.theme.TP3Theme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class MainView : ComponentActivity() {
+    private val authManager: AuthManager by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,7 +55,7 @@ class MainView : ComponentActivity() {
             TP3Theme {
                 Scaffold(
                     topBar = {
-                        TopBarMainView()
+                        TopBarMainView(authManager)
                     },
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
@@ -60,9 +68,19 @@ class MainView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarMainView() {
+fun TopBarMainView(authManager: AuthManager) {
     var expanded by remember { mutableStateOf(false) }
-
+    val us = remember {
+        mutableStateOf<User?>(null)
+    }
+    LaunchedEffect(key1 = Unit) {
+        authManager.getCurrentUser().collect { user ->
+            us.value = user
+        }
+    }
+    val username: String = us.value?.username?:""
+    val name: String = us.value?.name?:"Sin sesión iniciada"
+    val mail: String = us.value?.mail?:""
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
@@ -71,9 +89,11 @@ fun TopBarMainView() {
                         .background(Color.Red)
                         .fillMaxWidth()
                 ) {
-                    Image(imageVector = Icons.Default.AccountCircle, contentDescription = "userImage", modifier = Modifier.padding(16.dp).size(60.dp))
-                    Text("Usuario", modifier = Modifier.padding(8.dp), color = Color.White)
-                    Text("Usuario mail", modifier = Modifier.padding(8.dp), color = Color.White)
+                    Image(imageVector = Icons.Default.AccountCircle, contentDescription = "userImage", modifier = Modifier
+                        .padding(16.dp)
+                        .size(60.dp))
+                    Text(name, modifier = Modifier.padding(8.dp), color = Color.White)
+                    Text(mail, modifier = Modifier.padding(8.dp), color = Color.White)
                 }
                 HorizontalDivider()
                 NavigationDrawerItem(

@@ -11,8 +11,11 @@ import androidx.room.Room
 import frgp.utn.edu.ar.tp3.data.ParkingDatabase
 import frgp.utn.edu.ar.tp3.data.dao.UserDao
 import frgp.utn.edu.ar.tp3.data.entity.User
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import java.util.prefs.Preferences
 
@@ -45,13 +48,18 @@ class AuthManager(application: Application): AndroidViewModel(application) {
         dataStore.edit { it[CURRENT_USER] = "" }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun getCurrentUser(): Flow<User?> {
-        var username: String = ""
-        dataStore.data.map {
-            username = it[CURRENT_USER]?:""
+        return dataStore.data.map { preferences ->
+            val username = preferences[CURRENT_USER] ?: ""
+            if (username.trim().isEmpty()) {
+                null
+            } else {
+                dao.getUser(username)
+            }
+        }.flatMapConcat { user ->
+            user?: flowOf(null)
         }
-        if(username.trim().isEmpty()) return flow { emit(null) }
-        else return dao.getUser(username)
     }
 
 }
