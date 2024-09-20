@@ -23,6 +23,12 @@
             android:label="MainView"
             android:theme="@style/Theme.TP3" />
         <activity
+            android:name=".activity.me.MyAccount"
+            android:exported="false"
+            android:label="MyAccount"
+            android:theme="@style/Theme.TP3"
+            />
+        <activity
             android:name=".activity.login.Login"
             android:exported="true"
             android:theme="@style/Theme.TP3">

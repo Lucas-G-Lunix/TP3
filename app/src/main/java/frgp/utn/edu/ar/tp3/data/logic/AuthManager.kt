@@ -49,7 +49,7 @@ class AuthManager(application: Application): AndroidViewModel(application) {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun getCurrentUser(): Flow<User?> {
+    fun getCurrentUser(): Flow<User?> {
         return dataStore.data.map { preferences ->
             val username = preferences[CURRENT_USER] ?: ""
             if (username.trim().isEmpty()) {
