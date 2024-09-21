@@ -90,7 +90,7 @@ fun DrawerMenu(
                         onMenuItemClick(item.label)
                         if (context is Activity) {
                             val intent = Intent(context, item.activity)
-                           // intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            // intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             context.startActivity(intent)
                         }
                     },
