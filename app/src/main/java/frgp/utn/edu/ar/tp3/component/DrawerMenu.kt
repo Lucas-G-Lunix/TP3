@@ -30,10 +30,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import frgp.utn.edu.ar.tp3.activity.login.Login
 import frgp.utn.edu.ar.tp3.activity.main.MainView
 import frgp.utn.edu.ar.tp3.activity.me.MyAccount
 import frgp.utn.edu.ar.tp3.data.entity.User
 import frgp.utn.edu.ar.tp3.data.logic.AuthManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 val DrawerMenuDefaultOptions = listOf(
     DrawerMenuItem(label = "Parqueos", id = "parking", icon = Icons.Default.Place, activity = MainView::class.java),
@@ -68,12 +73,12 @@ fun DrawerMenu(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Image(imageVector = Icons.Default.AccountCircle, contentDescription = "userImage", modifier = androidx.compose.ui.Modifier
+            Image(imageVector = Icons.Default.AccountCircle, contentDescription = "userImage", modifier = Modifier
                 .padding(16.dp)
                 .size(60.dp)
             )
-            Text(name, modifier = androidx.compose.ui.Modifier.padding(8.dp), color = Color.White)
-            Text(mail, modifier = androidx.compose.ui.Modifier.padding(8.dp), color = Color.White)
+            Text(name, modifier = Modifier.padding(8.dp), color = Color.White)
+            Text(mail, modifier = Modifier.padding(8.dp), color = Color.White)
         }
         Column(
             modifier = Modifier
@@ -101,8 +106,20 @@ fun DrawerMenu(
             NavigationDrawerItem(
                 label = { Text("Cerrar sesión") },
                 selected = false,
-                onClick = {  },
-                icon = { Icon(Icons.AutoMirrored.Rounded.ExitToApp, "logoutIcon", modifier = androidx.compose.ui.Modifier.padding(16.dp)) }
+                onClick = {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        authManager.logout()
+                        withContext(Dispatchers.Main) {
+                            if (context is Activity) {
+                                val intent = Intent(context, Login::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                }
+                                context.startActivity(intent)
+                            }
+                        }
+                    }
+                },
+                icon = { Icon(Icons.AutoMirrored.Rounded.ExitToApp, "logoutIcon", modifier = Modifier.padding(16.dp)) }
             )
         }
     }

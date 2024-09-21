@@ -2,6 +2,8 @@ package frgp.utn.edu.ar.tp3.activity.signup
 
 import android.app.Application
 import android.content.Intent
+import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -172,12 +174,12 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
                 (repeatPasswordError.value?:ok()).error
             ).contains(true)) {
             _general.value = (false)
-            return false;
+            return false
         }
         val fields = arrayOf(name, mail, password, repeatPassword, username)
         if(fields.any { (it.value?:"").trim().isEmpty() }) {
             _general.value = (false)
-            return false;
+            return false
         }
         _general.value = true
         return true
@@ -193,11 +195,12 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
         changePassword("")
         changeRepeatPassword("")
         changeUsername("")
-        /*val intent = Intent(getApplication<Application>().applicationContext, Login::class.java).apply {
+        val context = getApplication<Application>().applicationContext
+        val intent = Intent(context, Login::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
-        startActivity(getApplication<Application>().applicationContext, intent, null)*/
-
+        makeText(context, "Usuario Creado Correctamente!", Toast.LENGTH_SHORT).show()
+        startActivity(getApplication<Application>().applicationContext, intent, null)
     }
 
 }
