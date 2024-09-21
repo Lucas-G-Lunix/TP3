@@ -2,6 +2,7 @@ package frgp.utn.edu.ar.tp3.activity.signup
 
 import android.app.Application
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.core.content.ContextCompat.startActivity
@@ -16,6 +17,7 @@ import frgp.utn.edu.ar.tp3.data.entity.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DataError {
     private var _message: String = ""
@@ -186,21 +188,42 @@ class SignUpViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun signup() {
-        if(!checkGen()) return
+        if (!checkGen()) return
+
         CoroutineScope(Dispatchers.IO).launch {
-            dao.insert(User(name = name.value?:"", mail = mail.value?:"", password = password.value?:"", username=username.value?:""))
+            try {
+                Log.d("UserInsertion", "Intentando insertar usuario: ${name.value ?: ""}, ${mail.value ?: ""}, ${username.value ?: ""}")
+                dao.insert(User(
+                    name = name.value ?: "",
+                    mail = mail.value ?: "",
+                    password = password.value ?: "",
+                    username = username.value ?: ""
+                ))
+                Log.d("UserInsertion", "Usuario insertado correctamente: ${name.value ?: ""}, ${mail.value ?: ""}, ${password.value ?: ""}, ${username.value ?: ""}")
+
+                withContext(Dispatchers.Main) {
+                    changeName("")
+                    changeMail("")
+                    changePassword("")
+                    changeRepeatPassword("")
+                    changeUsername("")
+                    val context = getApplication<Application>().applicationContext
+                    Toast.makeText(context, "Usuario Creado Correctamente!", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(context, Login::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+                    startActivity(context, intent, null)
+                }
+            } catch (e: Exception) {
+                Log.e("UserInsertion", "Error al insertar usuario: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    val context = getApplication<Application>().applicationContext
+                    Toast.makeText(context, "Error al crear usuario: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
         }
-        changeName("")
-        changeMail("")
-        changePassword("")
-        changeRepeatPassword("")
-        changeUsername("")
-        val context = getApplication<Application>().applicationContext
-        val intent = Intent(context, Login::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        makeText(context, "Usuario Creado Correctamente!", Toast.LENGTH_SHORT).show()
-        startActivity(getApplication<Application>().applicationContext, intent, null)
     }
+
 
 }
