@@ -26,7 +26,7 @@ val Application.dataStore by preferencesDataStore(name = "auth")
 class AuthManager(application: Application): AndroidViewModel(application) {
 
     private var db: ParkingDatabase =
-        Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").build()
+        Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").fallbackToDestructiveMigration().build()
     private var dao: UserDao_Impl = db.userDao() as UserDao_Impl
     private val dataStore = application.dataStore
     private val CURRENT_USER = stringPreferencesKey("current")

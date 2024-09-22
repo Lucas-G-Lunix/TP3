@@ -9,12 +9,12 @@ import java.util.UUID
 
 @Entity(
     tableName = "parkings",
-    indices = [ Index("value") ],
+    indices = [ Index("user") ],
     foreignKeys = arrayOf(
         ForeignKey(
             entity = User::class,
-            parentColumns = arrayOf("username"),
-            childColumns = arrayOf("user"),
+            parentColumns = ["username"],
+            childColumns = ["user"],
             onDelete = ForeignKey.CASCADE
         )
     )

@@ -3,8 +3,11 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -69,9 +72,11 @@ fun AddParkingButton(authManager: AuthManager, dao: ParkingDao) {
                                 "Parking agregado para $username con matrícula $matricula por $tiempo minutos",
                                 Toast.LENGTH_SHORT
                             )
-                            dao.insert(Parking(user = username!!, mat = matricula, duration = tiempo.toInt()))
-                            t.show()
-                            showDialog = false
+                            CoroutineScope(Dispatchers.IO).launch {
+                                dao.insert(Parking(user = username!!, mat = matricula, duration = tiempo.toInt()))
+                                t.show()
+                                showDialog = false
+                            }
                         } else {
                             Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                         }
@@ -92,13 +97,13 @@ fun AddParkingButton(authManager: AuthManager, dao: ParkingDao) {
                         value = matricula,
                         onValueChange = { matricula = it },
                         label = { Text("Matrícula") },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = tiempo,
                         onValueChange = { tiempo = it },
                         label = { Text("Tiempo (minutos)") },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }

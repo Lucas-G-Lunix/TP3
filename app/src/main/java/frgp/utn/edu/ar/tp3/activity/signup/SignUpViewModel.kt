@@ -36,7 +36,7 @@ class DataError {
 
 class SignUpViewModel(application: Application): AndroidViewModel(application) {
 
-    private val db: ParkingDatabase = Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").build()
+    private val db: ParkingDatabase = Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").fallbackToDestructiveMigration().build()
     private val dao: UserDao = db.userDao()
 
     private val _name = MutableLiveData("")

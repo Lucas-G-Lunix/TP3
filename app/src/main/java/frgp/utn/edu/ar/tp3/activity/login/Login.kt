@@ -72,7 +72,7 @@ class Login : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").build()
+        db = Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").fallbackToDestructiveMigration().build()
         dao = db.userDao()
 
         enableEdgeToEdge()
