@@ -28,10 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import frgp.utn.edu.ar.tp3.data.dao.ParkingDao
+import frgp.utn.edu.ar.tp3.data.entity.Parking
 import frgp.utn.edu.ar.tp3.data.logic.AuthManager
 
 @Composable
-fun AddParkingButton(authManager: AuthManager) {
+fun AddParkingButton(authManager: AuthManager, dao: ParkingDao) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
     var matricula by remember { mutableStateOf("") }
@@ -60,12 +62,15 @@ fun AddParkingButton(authManager: AuthManager) {
             confirmButton = {
                 Button(
                     onClick = {
+                        if(username == null) return@Button
                         if (matricula.isNotEmpty() && tiempo.isNotEmpty()) {
-                            Toast.makeText(
+                            val t = Toast.makeText(
                                 context,
                                 "Parking agregado para $username con matrícula $matricula por $tiempo minutos",
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            )
+                            dao.insert(Parking(user = username!!, mat = matricula, duration = tiempo.toInt()))
+                            t.show()
                             showDialog = false
                         } else {
                             Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()
@@ -77,7 +82,7 @@ fun AddParkingButton(authManager: AuthManager) {
             },
             dismissButton = {
                 Button(onClick = { showDialog = false }) {
-                    Icon(Icons.Filled.Close, contentDescription = "Cerrar diaalogo")
+                    Icon(Icons.Filled.Close, contentDescription = "Cerrar diálogo")
                 }
             },
             title = { Text("Agregar Parking") },

@@ -21,7 +21,7 @@ import java.util.UUID
 )
 data class Parking (
     @PrimaryKey(autoGenerate = true)
-    val id: UUID,
+    val id: Int = 0,
     val user: String,
     val mat: String,
     val duration: Int
