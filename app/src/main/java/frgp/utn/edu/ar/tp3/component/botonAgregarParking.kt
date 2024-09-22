@@ -31,12 +31,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import frgp.utn.edu.ar.tp3.activity.main.MainViewModel
 import frgp.utn.edu.ar.tp3.data.dao.ParkingDao
 import frgp.utn.edu.ar.tp3.data.entity.Parking
 import frgp.utn.edu.ar.tp3.data.logic.AuthManager
 
 @Composable
-fun AddParkingButton(authManager: AuthManager, dao: ParkingDao) {
+fun AddParkingButton(authManager: AuthManager, vm: MainViewModel) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
     var matricula by remember { mutableStateOf("") }
@@ -73,8 +74,9 @@ fun AddParkingButton(authManager: AuthManager, dao: ParkingDao) {
                                 Toast.LENGTH_SHORT
                             )
                             CoroutineScope(Dispatchers.IO).launch {
-                                dao.insert(Parking(user = username!!, mat = matricula, duration = tiempo.toInt()))
+                                vm.dao.insert(Parking(user = username!!, mat = matricula, duration = tiempo.toInt()))
                                 t.show()
+                                vm.update()
                                 showDialog = false
                             }
                         } else {

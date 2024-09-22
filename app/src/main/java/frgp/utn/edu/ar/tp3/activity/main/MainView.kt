@@ -55,7 +55,7 @@ class MainView : ComponentActivity() {
                         },
 
                         modifier = Modifier.fillMaxSize(),
-                        floatingActionButton = { AddParkingButton(authManager, vm.dao) }
+                        floatingActionButton = { AddParkingButton(authManager, vm) }
                     ) {
                         MainViewPage(modifier = Modifier.padding(it), vm = vm)
                     }

@@ -1,9 +1,7 @@
 package frgp.utn.edu.ar.tp3.activity.me
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -37,16 +34,11 @@ import androidx.room.Room
 import frgp.utn.edu.ar.tp3.activity.login.Login
 import frgp.utn.edu.ar.tp3.component.DrawerMenu
 import frgp.utn.edu.ar.tp3.component.DrawerMenuDefaultOptions
+import frgp.utn.edu.ar.tp3.data.ParkingDatabase
+import frgp.utn.edu.ar.tp3.data.dao.UserDao
 import frgp.utn.edu.ar.tp3.data.entity.User
 import frgp.utn.edu.ar.tp3.data.logic.AuthManager
 import frgp.utn.edu.ar.tp3.ui.theme.TP3Theme
-import   frgp. utn. edu. ar. tp3.activity.signup.SignUpViewModel
-import frgp.utn.edu.ar.tp3.data.ParkingDatabase
-import frgp.utn.edu.ar.tp3.data.dao.UserDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MyAccount: ComponentActivity()  {
     private val authManager: AuthManager by viewModels()

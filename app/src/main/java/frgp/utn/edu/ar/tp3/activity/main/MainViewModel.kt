@@ -26,7 +26,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private val _parkings = MutableLiveData<List<Parking>>()
     val parkings: LiveData<List<Parking>> = _parkings
 
-    init {
+    fun update() {
         viewModelScope.launch {
             val currentUser = am.getCurrentUser().firstOrNull()
             if (currentUser != null) {
@@ -37,6 +37,10 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
                 _parkings.value = emptyList()
             }
         }
+    }
+
+    init {
+        update()
     }
 
 
