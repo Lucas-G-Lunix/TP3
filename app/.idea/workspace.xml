@@ -10,9 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1e2106c-32da-4d97-80e2-4448f98ce0c6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/main/MainViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/dao/ParkingDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/entity/Parking.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/ParkingDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/ParkingDatabase.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +29,13 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
