@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import frgp.utn.edu.ar.tp3.component.AddParkingButton
 import frgp.utn.edu.ar.tp3.component.DrawerMenu
 import frgp.utn.edu.ar.tp3.component.DrawerMenuDefaultOptions
+import frgp.utn.edu.ar.tp3.component.ParkingCard
 import frgp.utn.edu.ar.tp3.data.entity.User
 import frgp.utn.edu.ar.tp3.data.logic.AuthManager
 import frgp.utn.edu.ar.tp3.ui.theme.TP3Theme
@@ -53,7 +54,6 @@ class MainView : ComponentActivity() {
                         topBar = {
                             TopBarMainView(authManager, vm)
                         },
-
                         modifier = Modifier.fillMaxSize(),
                         floatingActionButton = { AddParkingButton(authManager, vm) }
                     ) {
@@ -86,17 +86,7 @@ fun TopBarMainView(authManager: AuthManager, vm: MainViewModel) {
     )
 }
 
-fun mtoTime(minutes: Int): String {
-    val days = minutes / 1440
-    val remainingMinutesAfterDays = minutes % 1440
-    val hours = remainingMinutesAfterDays / 60
-    val remainingMinutes = remainingMinutesAfterDays % 60
-    val parts = mutableListOf<String>()
-    if (days > 0) parts.add("$days d")
-    if (hours > 0) parts.add("$hours h")
-    if (remainingMinutes > 0) parts.add("$remainingMinutes m")
-    return if (parts.isEmpty()) "0 m" else parts.joinToString(", ")
-}
+
 
 
 
@@ -111,17 +101,7 @@ fun MainViewPage(modifier: Modifier = Modifier, vm: MainViewModel) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(data) {
-                println("Item: ${it.mat} - Duration: ${it.duration}")
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(16.dp),
-                        text = "${it.mat}\n${mtoTime(it.duration)}"
-                    )
-                }
+                ParkingCard(it) { vm.update() }
             }
         }
     if(data.isEmpty())

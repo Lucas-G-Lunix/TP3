@@ -20,6 +20,7 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -88,8 +89,8 @@ fun AddParkingButton(authManager: AuthManager, vm: MainViewModel) {
                 }
             },
             dismissButton = {
-                Button(onClick = { showDialog = false }) {
-                    Icon(Icons.Filled.Close, contentDescription = "Cerrar diálogo")
+                TextButton(onClick = { showDialog = false }) {
+                    Text("Cancelar")
                 }
             },
             title = { Text("Agregar Parking") },
