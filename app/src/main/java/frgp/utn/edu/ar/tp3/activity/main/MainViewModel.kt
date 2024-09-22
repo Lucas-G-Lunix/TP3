@@ -1,6 +1,7 @@
 package frgp.utn.edu.ar.tp3.activity.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +31,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             val currentUser = am.getCurrentUser().firstOrNull()
             if (currentUser != null) {
                 val userParkings = dao.getByUsername(currentUser.username)
+                Log.i(userParkings.firstOrNull().toString(), userParkings.firstOrNull()?.firstOrNull().toString())
                 _parkings.value = userParkings.firstOrNull()
             } else {
                 _parkings.value = emptyList()

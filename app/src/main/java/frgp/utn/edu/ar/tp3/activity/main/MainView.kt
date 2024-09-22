@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -45,14 +46,19 @@ class MainView : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TP3Theme {
-                Scaffold(
-                    topBar = {
-                        TopBarMainView(authManager)
-                    },
-                    modifier = Modifier.fillMaxSize(),
-                    floatingActionButton = { AddParkingButton(authManager, vm.dao) }
-                ) { innerPadding ->
-                    MainViewPage(modifier = Modifier.padding(innerPadding), vm = vm)
+                ModalNavigationDrawer(
+                    drawerContent = { DrawerMenu(authManager, DrawerMenuDefaultOptions, {}, "parking") }
+                ) {
+                    Scaffold(
+                        topBar = {
+                            TopBarMainView(authManager, vm)
+                        },
+
+                        modifier = Modifier.fillMaxSize(),
+                        floatingActionButton = { AddParkingButton(authManager, vm.dao) }
+                    ) {
+                        MainViewPage(modifier = Modifier.padding(it), vm = vm)
+                    }
                 }
             }
         }
@@ -61,7 +67,7 @@ class MainView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarMainView(authManager: AuthManager) {
+fun TopBarMainView(authManager: AuthManager, vm: MainViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val us = remember {
         mutableStateOf<User?>(null)
@@ -71,51 +77,53 @@ fun TopBarMainView(authManager: AuthManager) {
             us.value = user
         }
     }
-    ModalNavigationDrawer(
-        drawerContent = { DrawerMenu(authManager, DrawerMenuDefaultOptions, {}, "parking") }
-    ) {
-        TopAppBar(
-            title = { Text(text = "Parking Control") },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Red,
-                titleContentColor = Color.White
-            )
+    TopAppBar(
+        title = { Text(text = "Parking Control") },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Red,
+            titleContentColor = Color.White
         )
-    }
+    )
 }
 
 fun mtoTime(minutes: Int): String {
-    if(minutes < 60) return "$minutes m";
-    else {
-        val h: Int = (minutes / 60 - minutes % 60)
-        if(h < 24) return "$h h, $minutes m";
-        else {
-            val d: Int = (h / 24 - h % 24)
-            return "$d d, $h h, $minutes m"
-        }
-    }
+    val days = minutes / 1440
+    val remainingMinutesAfterDays = minutes % 1440
+    val hours = remainingMinutesAfterDays / 60
+    val remainingMinutes = remainingMinutesAfterDays % 60
+    val parts = mutableListOf<String>()
+    if (days > 0) parts.add("$days d")
+    if (hours > 0) parts.add("$hours h")
+    if (remainingMinutes > 0) parts.add("$remainingMinutes m")
+    return if (parts.isEmpty()) "0 m" else parts.joinToString(", ")
 }
+
+
 
 @Composable
 fun MainViewPage(modifier: Modifier = Modifier, vm: MainViewModel) {
-    val items by vm.parkings.observeAsState(emptyList())
-    if(items.isNotEmpty())
-        LazyVerticalGrid(
+    val data by vm.parkings.observeAsState(emptyList())
+    LazyVerticalGrid(
+        modifier = modifier,
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(items) {
+            items(data) {
+                println("Item: ${it.mat} - Duration: ${it.duration}")
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(4.dp)
                 ) {
-                    Text(it.mat + "\n" + mtoTime(it.duration))
+                    Text(
+                        modifier = Modifier.padding(16.dp),
+                        text = "${it.mat}\n${mtoTime(it.duration)}"
+                    )
                 }
             }
         }
-    else
+    if(data.isEmpty())
         Text("No hay parqueos. ")
 }
