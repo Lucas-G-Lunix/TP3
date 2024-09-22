@@ -81,7 +81,6 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-paging:$room_version")
-
-
+    implementation("androidx.compose.material:material-icons-extended:1.7.2")
 
 }
