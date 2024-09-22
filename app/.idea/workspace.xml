@@ -10,11 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1e2106c-32da-4d97-80e2-4448f98ce0c6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/main/MainViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/dao/ParkingDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/entity/Parking.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/ParkingDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/data/ParkingDatabase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/main/MainViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frgp/utn/edu/ar/tp3/activity/main/MainViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +21,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=ZY32FT9RP5)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\Max\.android\avd\Pixel_Fold_API_35.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
