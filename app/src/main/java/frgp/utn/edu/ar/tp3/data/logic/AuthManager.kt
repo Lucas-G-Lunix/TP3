@@ -11,23 +11,23 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.room.Room
 import frgp.utn.edu.ar.tp3.data.ParkingDatabase
 import frgp.utn.edu.ar.tp3.data.dao.UserDao
-import frgp.utn.edu.ar.tp3.data.dao.UserDao_Impl
 import frgp.utn.edu.ar.tp3.data.entity.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import java.util.prefs.Preferences
 
 val Application.dataStore by preferencesDataStore(name = "auth")
 
-class AuthManager(application: Application): AndroidViewModel(application) {
+class AuthManager(application: Application) : AndroidViewModel(application) {
 
     private var db: ParkingDatabase =
-        Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking").fallbackToDestructiveMigration().build()
-    private var dao: UserDao_Impl = db.userDao() as UserDao_Impl
+        Room.databaseBuilder(application.applicationContext, ParkingDatabase::class.java, "parking")
+            .fallbackToDestructiveMigration()
+            .build()
+
+    private var dao: UserDao = db.userDao()
     private val dataStore = application.dataStore
     private val CURRENT_USER = stringPreferencesKey("current")
 
@@ -38,12 +38,14 @@ class AuthManager(application: Application): AndroidViewModel(application) {
             throw IllegalArgumentException("El nombre de usuario o la contraseña están vacíos.")
         }
         try {
+            // Verificar credenciales del usuario
             val isUserValid = dao.verifyUser(username, password)
             if (isUserValid) {
                 Log.d("Login", "Credenciales correctas para el usuario: $username")
                 dataStore.edit { it[CURRENT_USER] = username }
             } else {
                 Log.e("Login", "Error: Credenciales incorrectas para el usuario: $username")
+                throw IllegalArgumentException("Credenciales incorrectas.")
             }
         } catch (e: Exception) {
             Log.e("Login", "Error durante el proceso de inicio de sesión: ${e.message}")
@@ -65,8 +67,7 @@ class AuthManager(application: Application): AndroidViewModel(application) {
                 dao.getUser(username)
             }
         }.flatMapConcat { user ->
-            user?: flowOf(null)
+            user ?: flowOf(null)
         }
     }
-
 }
