@@ -57,7 +57,7 @@ fun ParkingCard (data: Parking, onUpdateRequest: () -> Unit, onDeleteRequest: ()
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(6.dp, 6.dp),
         onClick = {
             expanded = true
         }
