@@ -1,13 +1,20 @@
 package frgp.utn.edu.ar.tp3.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,12 +52,12 @@ fun metoTime(minutes: Int): String {
 }
 
 @Composable
-fun ParkingCard (data: Parking, onUpdateRequest: () -> Unit) {
+fun ParkingCard (data: Parking, onUpdateRequest: () -> Unit, onDeleteRequest: () -> Unit) {
     var expanded by remember { mutableStateOf<Boolean>(false)  }
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(16.dp),
         onClick = {
             expanded = true
         }
@@ -66,17 +73,34 @@ fun ParkingCard (data: Parking, onUpdateRequest: () -> Unit) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(16.dp),
+                    .height(320.dp)
+                    .padding(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(12.dp),
             ) {
-                Text(
-                    text = "Id: ${data.id}\nMatrícula: ${data.mat}\nTiempo: ${metoTime(data.duration)}",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(8.dp)
+                ) {
+                    Text(
+                        text = "Parking N.º ${data.id}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .wrapContentSize(Alignment.Center),
+                        textAlign = TextAlign.Center
+                    )
+                    ListItem(
+                        headlineContent = { Text(data.mat) },
+                        supportingContent = { Text("Matrícula") }
+                    )
+                    ListItem(
+                        headlineContent = { Text(metoTime(data.duration)) },
+                        supportingContent = { Text("Tiempo") }
+                    )
+                    TextButton(onClick = { onDeleteRequest() }) {
+                        Text("Eliminar")
+                    }
+                }
             }
         }
 }

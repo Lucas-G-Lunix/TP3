@@ -96,12 +96,14 @@ fun MainViewPage(modifier: Modifier = Modifier, vm: MainViewModel) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(data) {
-                ParkingCard(it) { vm.update() }
+                ParkingCard(it,{ vm.update() }, {
+                    vm.del(it)
+                })
             }
         }
     if(data.isEmpty())
